@@ -1,16 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>김태현의 목표와 자기소개</title>
-
-  <!-- D-day 설정: 목표 날짜와 이름은 여기서 바꾸세요. -->
-  <script>
-    const DDAY_DATE = "2027-11-18";
-    const DDAY_TITLE = "수능까지";
-  </script>
-
+  <title>나의 목표와 자기소개</title>
   <style>
     * {
       box-sizing: border-box;
@@ -18,385 +12,377 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
       padding: 24px 16px 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: linear-gradient(135deg, #edf0ff, #f9edff);
-      font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
-      color: #20243a;
-      overflow-x: hidden;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      background: #f3f6fb;
+      color: #202b3c;
     }
 
-    /* D-day 카운터 */
-    .dday-card {
-      width: 100%;
-      max-width: 360px;
-      padding: 22px 16px;
-      margin: 0 auto 20px;
-      border-radius: 24px;
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 5px 20px #20305010;
+    }
+
+    h1, h2, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 28px;
       text-align: center;
-      color: #ffffff;
-      background: linear-gradient(135deg, #7779ed, #a47bea);
-      box-shadow: 0 12px 30px rgba(100, 90, 200, 0.2);
+    }
+
+    h2 {
+      font-size: 21px;
+      margin-bottom: 16px;
+    }
+
+    /* 수능 D-day */
+    .dday {
+      text-align: center;
+      background: #e5efff;
     }
 
     .dday-number {
-      margin: 0;
-      font-size: clamp(44px, 12vw, 64px);
-      font-weight: 900;
-      letter-spacing: -2px;
-      line-height: 1.2;
-      overflow-wrap: anywhere;
+      font-size: 42px;
+      font-weight: bold;
+      color: #2463eb;
+      margin: 12px 0;
     }
 
-    .dday-title {
-      margin: 8px 0 0;
+    .subtext {
+      color: #637087;
       font-size: 14px;
-      font-weight: 500;
-      color: #f0efff;
     }
 
     /* 자기소개 카드 */
-    .card {
-      width: 100%;
-      max-width: 360px;
-      padding: 36px 24px;
-      background: #ffffff;
-      border-radius: 24px;
+    .profile {
       text-align: center;
-      box-shadow: 0 16px 45px rgba(65, 63, 120, 0.12);
     }
 
     .emoji {
-      width: 96px;
-      height: 96px;
-      margin: 0 auto 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff0e5;
-      border-radius: 28px;
       font-size: 56px;
+      margin-bottom: 12px;
     }
 
-    .card h1 {
-      margin: 0 0 12px;
-      font-size: 30px;
-      font-weight: 800;
-      letter-spacing: -1px;
-    }
-
-    .intro {
-      margin: 0 0 24px;
-      color: #73768a;
-      font-size: 14px;
-      line-height: 1.8;
-      word-break: keep-all;
-      overflow-wrap: anywhere;
+    .profile p {
+      color: #637087;
+      line-height: 1.7;
     }
 
     .tags {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 28px;
+      margin: 18px 0;
     }
 
     .tag {
-      padding: 9px 14px;
+      background: #edf2ff;
+      color: #3157b7;
+      padding: 8px 14px;
       border-radius: 999px;
       font-size: 14px;
-      font-weight: 600;
-      white-space: nowrap;
     }
 
-    .tag:nth-child(1) {
-      color: #4359bd;
-      background: #edf2ff;
-    }
-
-    .tag:nth-child(2) {
-      color: #7950a8;
-      background: #f3eaff;
-    }
-
-    .tag:nth-child(3) {
-      color: #287b57;
-      background: #e4f8ef;
-    }
-
-    .github-button {
-      display: block;
-      width: 100%;
-      padding: 15px 20px;
-      border-radius: 14px;
-      background: #252a40;
-      color: #ffffff;
+    .github {
+      display: inline-block;
+      padding: 11px 20px;
+      background: #202b3c;
+      color: white;
       text-decoration: none;
-      font-size: 15px;
-      font-weight: 700;
-      transition: transform 0.2s, background 0.2s;
+      border-radius: 12px;
     }
 
-    .github-button:hover {
-      background: #414867;
-      transform: translateY(-2px);
-    }
-
-    .github-button:focus-visible {
-      outline: 3px solid #8296ff;
-      outline-offset: 4px;
-    }
-
-    /* 만다라트 목표판 */
-    .mandalart {
-      width: 100%;
-      max-width: 600px;
-      margin: 28px auto 0;
-      padding: 20px;
-      color: #302b49;
-    }
-
-    .mandalart-title {
-      margin: 0;
-      text-align: center;
-      font-size: 28px;
-      font-weight: 800;
-    }
-
-    .mandalart-guide {
-      margin: 8px 0 22px;
-      text-align: center;
-      font-size: 14px;
-      color: #77718f;
-    }
-
-    .mandalart-grid {
+    /* 5×5 만다라트 */
+    .goal-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 6px;
-      width: 100%;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
     }
 
     .goal-cell {
-      min-width: 0;
-      aspect-ratio: 1 / 1;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 6px;
-      overflow-wrap: anywhere;
-      word-break: keep-all;
-      overflow-y: auto;
+      align-items: center;
+      min-height: 115px;
+      padding: 10px 5px;
+      border: 1px solid #dce4ef;
+      border-radius: 12px;
+      background: #f9fbff;
       text-align: center;
-      font-size: clamp(10px, 2.8vw, 15px);
+      font-size: 14px;
       line-height: 1.5;
-      font-weight: 600;
-      background: #ffffff;
-      border: 1px solid #dcd7f5;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(70, 55, 130, 0.05);
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
       cursor: text;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s, background 0.2s;
     }
 
     .goal-cell:focus {
-      border-color: #8575e8;
-      box-shadow: 0 0 0 2px rgba(133, 117, 232, 0.2);
+      outline: 2px solid #6c95ff;
+      border-color: #6c95ff;
+      background: white;
     }
 
-    .goal-cell.goal-center {
-      color: #ffffff;
-      background: linear-gradient(145deg, #7664dc, #9a78e8);
-      border-color: #7664dc;
-      font-size: clamp(12px, 3.2vw, 17px);
-      font-weight: 800;
+    .goal-cell.main-goal {
+      background: #dce9ff;
+      border: 2px solid #3978d4;
+      color: #173e78;
+      font-weight: bold;
+      font-size: 16px;
     }
 
-    .goal-cell.goal-center:focus {
-      box-shadow: 0 0 0 3px rgba(118, 100, 220, 0.3);
+    .hint {
+      margin: 12px 0 0;
+      font-size: 13px;
+      color: #758198;
+      line-height: 1.6;
     }
 
-    .mandalart-status {
-      margin: 14px 0 0;
-      text-align: center;
-      font-size: 12px;
-      color: #77718f;
+    .reset-button {
+      margin-top: 14px;
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 15px;
+      background: #e8edf5;
+      color: #26344a;
+      cursor: pointer;
     }
 
-    @media (max-width: 380px) {
+    @media (max-width: 600px) {
       body {
-        padding: 16px 10px 28px;
+        padding: 14px 8px 28px;
       }
 
       .card {
-        padding: 28px 18px;
+        padding: 16px 10px;
+        border-radius: 15px;
       }
 
-      .card h1 {
-        font-size: 26px;
+      h1 {
+        font-size: 23px;
       }
 
-      .emoji {
-        width: 84px;
-        height: 84px;
-        font-size: 48px;
-      }
-
-      .mandalart {
-        padding: 10px 0;
-      }
-
-      .mandalart-grid {
+      .goal-grid {
         gap: 4px;
       }
 
       .goal-cell {
-        padding: 4px;
-        border-radius: 7px;
-        line-height: 1.35;
+        min-height: 86px;
+        padding: 5px 2px;
+        font-size: 11px;
+        border-radius: 8px;
+      }
+
+      .goal-cell.main-goal {
+        font-size: 12px;
+      }
+
+      .dday-number {
+        font-size: 34px;
       }
     }
   </style>
 </head>
 
 <body>
-  <!-- D-day 카운터 -->
-  <section class="dday-card" aria-label="D-day 카운터">
-    <p class="dday-number" id="dday-number">계산 중…</p>
-    <p class="dday-title" id="dday-title">수능까지</p>
-  </section>
+  <main class="container">
 
-  <!-- 자기소개 카드 -->
-  <main class="card">
-    <div class="emoji" aria-label="불꽃">🔥</div>
-    <h1>김태현</h1>
-    <p class="intro">물리랑 코딩을 좋아하는 고등학교 1학년입니다</p>
+    <!-- 수능 D-day -->
+    <section class="card dday">
+      <h1>📅 수능까지</h1>
+      <div class="dday-number" id="dday">계산 중...</div>
+      <p class="subtext">목표 날짜: 2027년 11월 18일</p>
+    </section>
 
-    <div class="tags" aria-label="좋아하는 것">
-      <span class="tag">⚽ 축구</span>
-      <span class="tag">🎵 음악</span>
-      <span class="tag">⚛️ 물리학</span>
-    </div>
+    <!-- 자기소개 카드 -->
+    <section class="card profile">
+      <div class="emoji">🔥</div>
+      <h1>김태현</h1>
+      <p>물리랑 코딩을 좋아하는 고등학교 1학년입니다</p>
 
-    <!-- 아래 주소를 본인의 GitHub 주소로 바꿔도 됩니다. -->
-    <a
-      class="github-button"
-      href="https://github.com/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >내 깃허브 ↗</a>
+      <div class="tags">
+        <span class="tag">⚽ 축구</span>
+        <span class="tag">🎵 음악</span>
+        <span class="tag">⚛️ 물리학</span>
+      </div>
+
+      <a class="github"
+         href="https://github.com/"
+         target="_blank"
+         rel="noopener noreferrer">
+        내 깃허브 ↗
+      </a>
+    </section>
+
+    <!-- 만다라트 목표판 -->
+    <section class="card">
+      <h1>🎯 나의 만다라트</h1>
+      <p class="subtext" style="text-align:center">
+        물리학과 진학을 위한 25가지 목표
+      </p>
+
+      <div class="goal-grid" id="goalGrid"></div>
+
+      <p class="hint">
+        💡 목표 칸을 클릭하면 바로 수정할 수 있어요.
+        입력한 내용은 자동으로 저장됩니다.
+      </p>
+
+      <button class="reset-button" id="resetButton" type="button">
+        처음 목표로 되돌리기
+      </button>
+    </section>
+
   </main>
 
-  <!-- 만다라트 목표판 -->
-  <section class="mandalart">
-    <h2 class="mandalart-title">나의 목표</h2>
-    <p class="mandalart-guide">칸을 눌러서 고칠 수 있어요</p>
-
-    <div class="mandalart-grid" id="mandalart-grid">
-      <div class="goal-cell" contenteditable="true" spellcheck="false">매일 영어 단어 100개 외우기</div>
-      <div class="goal-cell" contenteditable="true" spellcheck="false">수학 오답노트</div>
-      <div class="goal-cell" contenteditable="true" spellcheck="false">주 4회 운동</div>
-
-      <div class="goal-cell" contenteditable="true" spellcheck="false">독서 월 2권</div>
-      <div class="goal-cell goal-center" contenteditable="true" spellcheck="false">물리학과 진학</div>
-      <div class="goal-cell" contenteditable="true" spellcheck="false">과학 자유 주제 발표</div>
-
-      <div class="goal-cell" contenteditable="true" spellcheck="false">8시간 수면</div>
-      <div class="goal-cell" contenteditable="true" spellcheck="false">물리학 심화 주제 탐구</div>
-      <div class="goal-cell" contenteditable="true" spellcheck="false">코딩 포트폴리오</div>
-    </div>
-    <p class="mandalart-status" id="mandalart-status" aria-live="polite">수정한 내용은 자동 저장돼요.</p>
-  </section>
-
   <script>
-    // D-day를 오늘 날짜와 비교해 자동 계산합니다.
-    (() => {
+    // 수능 D-day 계산
+    function updateDday() {
+      const target = new Date(2027, 10, 18);
       const today = new Date();
-      const target = new Date(DDAY_DATE + "T00:00:00");
 
-      const todayUTC = Date.UTC(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate()
-      );
+      today.setHours(0, 0, 0, 0);
 
-      const targetUTC = Date.UTC(
-        target.getFullYear(),
-        target.getMonth(),
-        target.getDate()
-      );
+      const difference = target.getTime() - today.getTime();
+      const days = Math.ceil(difference / (1000 * 60 * 60 * 24));
 
-      const remaining = Math.round(
-        (targetUTC - todayUTC) / (1000 * 60 * 60 * 24)
-      );
+      const output = document.getElementById("dday");
 
-      const numberElement = document.getElementById("dday-number");
-      const titleElement = document.getElementById("dday-title");
-
-      if (remaining > 0) {
-        numberElement.textContent = `D-${remaining}`;
-      } else if (remaining === 0) {
-        numberElement.textContent = "D-Day";
+      if (days > 0) {
+        output.textContent = "D-" + days;
+      } else if (days === 0) {
+        output.textContent = "D-DAY";
       } else {
-        numberElement.textContent = `D+${Math.abs(remaining)}`;
+        output.textContent = "D+" + Math.abs(days);
       }
+    }
 
-      titleElement.textContent = DDAY_TITLE;
-    })();
+    updateDday();
 
-    // 만다라트: 수정한 목표를 브라우저에 자동 저장합니다.
-    (() => {
-      const grid = document.getElementById("mandalart-grid");
-      const status = document.getElementById("mandalart-status");
-      const STORAGE_KEY = "my-mandalart-goals-v1";
+    // 기본 만다라트 목표 25개
+    const defaultGoals = [
+      "영어 단어 외우기",
+      "수학 오답노트",
+      "물리 개념 정리",
+      "과학 독서",
+      "과학 발표",
 
-      if (!grid || !status) return;
+      "매일 영어 복습",
+      "수학 문제 풀이",
+      "과학 심화 탐구",
+      "코딩 프로젝트",
+      "파이썬 기초",
 
-      const cells = Array.from(grid.querySelectorAll(".goal-cell"));
+      "주 4회 운동",
+      "8시간 수면",
+      "물리학과 진학",
+      "주간 계획 세우기",
+      "스마트폰 시간 관리",
 
+      "월 2권 독서",
+      "시험 후 오답 분석",
+      "물리 실험 기록",
+      "학교 수업 복습",
+      "꾸준한 공부 습관",
+
+      "수능 기초 다지기",
+      "모르는 것 질문하기",
+      "탐구 보고서 작성",
+      "공부 시간 기록",
+      "매주 목표 점검"
+    ];
+
+    const STORAGE_KEY = "physics-mandalart-5x5";
+    const goalGrid = document.getElementById("goalGrid");
+
+    // 저장된 목표 불러오기
+    function loadGoals() {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
 
         if (saved) {
-          const goals = JSON.parse(saved);
+          const parsed = JSON.parse(saved);
 
-          if (Array.isArray(goals) && goals.length === cells.length) {
-            cells.forEach((cell, index) => {
-              cell.textContent = String(goals[index] ?? "");
-            });
+          if (
+            Array.isArray(parsed) &&
+            parsed.length === 25 &&
+            parsed.every(item => typeof item === "string")
+          ) {
+            return parsed;
           }
         }
       } catch (error) {
-        status.textContent = "저장된 내용을 불러오지 못했어요.";
+        console.warn("저장된 목표를 불러오지 못했습니다.", error);
       }
 
-      function saveGoals() {
-        try {
-          const goals = cells.map(cell => cell.innerText.trim());
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
-          status.textContent = "✓ 자동 저장 완료";
-        } catch (error) {
-          status.textContent =
-            "저장할 수 없어요. 브라우저 저장 설정을 확인해 주세요.";
+      return [...defaultGoals];
+    }
+
+    let goals = loadGoals();
+
+    // 목표를 브라우저에 저장
+    function saveGoals() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
+      } catch (error) {
+        alert("저장할 수 없습니다. 브라우저의 저장 설정을 확인해 주세요.");
+      }
+    }
+
+    // 25개 목표 칸 만들기
+    function renderGoals() {
+      goalGrid.replaceChildren();
+
+      goals.forEach((goal, index) => {
+        const cell = document.createElement("div");
+
+        cell.className = "goal-cell";
+        cell.contentEditable = "true";
+        cell.setAttribute("role", "textbox");
+        cell.setAttribute("aria-label", (index + 1) + "번째 목표");
+        cell.setAttribute("spellcheck", "false");
+        cell.textContent = goal;
+
+        if (index === 12) {
+          cell.classList.add("main-goal");
+          cell.setAttribute("aria-label", "중심 목표: 물리학과 진학");
         }
-      }
 
-      cells.forEach(cell => {
-        cell.addEventListener("input", saveGoals);
-
-        cell.addEventListener("keydown", event => {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            cell.blur();
-          }
+        // 글자를 수정할 때마다 자동 저장
+        cell.addEventListener("input", () => {
+          goals[index] = cell.innerText;
+          saveGoals();
         });
+
+        goalGrid.appendChild(cell);
       });
-    })();
+    }
+
+    renderGoals();
+
+    // 기본 목표로 초기화
+    document.getElementById("resetButton").addEventListener("click", () => {
+      const confirmed = confirm(
+        "수정한 목표를 모두 지우고 처음 목표로 되돌릴까요?"
+      );
+
+      if (!confirmed) return;
+
+      goals = [...defaultGoals];
+      saveGoals();
+      renderGoals();
+    });
   </script>
 </body>
 </html>
