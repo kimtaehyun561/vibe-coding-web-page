@@ -1,0 +1,495 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>업다운 숫자 맞히기 게임</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 20px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: white;
+      background: linear-gradient(135deg, #17152f, #30265c);
+    }
+
+    .game {
+      width: 100%;
+      max-width: 430px;
+      padding: 25px 20px;
+      background: #211e42;
+      border: 1px solid #6254a0;
+      border-radius: 25px;
+      box-shadow: 0 10px 40px #0005;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: #c5b5ff;
+      font-size: 29px;
+    }
+
+    .subtitle {
+      color: #b8b1d8;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .target {
+      padding: 17px;
+      border-radius: 16px;
+      background: #302b58;
+      margin-bottom: 18px;
+    }
+
+    .target-label {
+      color: #b8b1d8;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .target-number {
+      font-size: 35px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .heart-box {
+      padding: 15px;
+      border-radius: 15px;
+      background: #302b58;
+      margin-bottom: 20px;
+    }
+
+    .heart-label {
+      color: #b8b1d8;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    #hearts {
+      font-size: 25px;
+      letter-spacing: 5px;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 9px;
+      margin-bottom: 15px;
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 15px;
+      border: 2px solid #6659a5;
+      border-radius: 13px;
+      background: #17152f;
+      color: white;
+      font-size: 20px;
+      text-align: center;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #aa92ff;
+    }
+
+    button {
+      border: none;
+      border-radius: 13px;
+      padding: 0 20px;
+      background: linear-gradient(135deg, #9274ff, #b16bff);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .message {
+      min-height: 75px;
+      padding: 17px 10px;
+      margin-bottom: 18px;
+      border-radius: 15px;
+      background: #302b58;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    #result {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffcf79;
+    }
+
+    #description {
+      color: #c2bbdf;
+      font-size: 13px;
+    }
+
+    .history {
+      padding: 17px;
+      background: #302b58;
+      border-radius: 15px;
+      text-align: left;
+    }
+
+    .history-title {
+      font-size: 14px;
+      color: #c5b5ff;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    #historyList {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 25px;
+    }
+
+    .history-item {
+      padding: 8px 11px;
+      border-radius: 9px;
+      background: #45406e;
+      font-size: 13px;
+    }
+
+    .history-item.up {
+      color: #91caff;
+    }
+
+    .history-item.down {
+      color: #ffb38e;
+    }
+
+    .history-item.correct {
+      color: #8ff0b2;
+    }
+
+    .restart {
+      width: 100%;
+      height: 52px;
+      margin-top: 18px;
+      font-size: 17px;
+    }
+
+    .footer {
+      color: #8982b9;
+      font-size: 12px;
+      margin-top: 17px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="game">
+
+    <h1>🔢 UP & DOWN</h1>
+
+    <div class="subtitle">
+      컴퓨터가 생각한 숫자를 맞혀보세요!
+    </div>
+
+    <section class="target">
+      <div class="target-label">숫자의 범위</div>
+      <div class="target-number">1 ~ 100</div>
+    </section>
+
+    <section class="heart-box">
+      <div class="heart-label">남은 기회</div>
+      <div id="hearts">❤️❤️❤️❤️❤️❤️❤️</div>
+    </section>
+
+    <div class="input-area">
+      <input
+        type="number"
+        id="guessInput"
+        placeholder="숫자 입력"
+        min="1"
+        max="100"
+        inputmode="numeric"
+      >
+
+      <button id="guessBtn">확인</button>
+    </div>
+
+    <section class="message">
+      <div id="result">READY!</div>
+      <div id="description">
+        1부터 100 사이의 숫자를 입력하세요.
+      </div>
+    </section>
+
+    <section class="history">
+      <div class="history-title">
+        📝 입력 기록
+      </div>
+
+      <div id="historyList">
+        <span style="color:#aaa6c9;font-size:13px;">
+          아직 입력한 숫자가 없습니다.
+        </span>
+      </div>
+    </section>
+
+    <button class="restart" id="restartBtn">
+      🔄 새 게임 시작
+    </button>
+
+    <div class="footer">
+      기회는 총 7번! 신중하게 숫자를 골라보세요.
+    </div>
+
+  </main>
+
+  <script>
+
+    // HTML 요소 가져오기
+    const guessInput = document.getElementById("guessInput");
+    const guessBtn = document.getElementById("guessBtn");
+    const restartBtn = document.getElementById("restartBtn");
+
+    const hearts = document.getElementById("hearts");
+    const result = document.getElementById("result");
+    const description = document.getElementById("description");
+    const historyList = document.getElementById("historyList");
+
+    // 게임 변수
+    let answer;
+    let chances;
+    let gameOver;
+    let guesses;
+
+    // 새로운 게임 시작
+    function startGame() {
+
+      // 1~100 사이 랜덤 숫자
+      answer = Math.floor(Math.random() * 100) + 1;
+
+      // 기회 초기화
+      chances = 7;
+
+      // 게임 진행 상태
+      gameOver = false;
+
+      // 입력 기록 초기화
+      guesses = [];
+
+      // 화면 초기화
+      guessInput.value = "";
+      guessInput.disabled = false;
+      guessBtn.disabled = false;
+
+      result.textContent = "READY!";
+      result.style.color = "#ffcf79";
+
+      description.textContent =
+        "1부터 100 사이의 숫자를 입력하세요.";
+
+      historyList.innerHTML =
+        '<span style="color:#aaa6c9;font-size:13px;">아직 입력한 숫자가 없습니다.</span>';
+
+      updateHearts();
+
+      guessInput.focus();
+    }
+
+    // 하트 업데이트
+    function updateHearts() {
+
+      hearts.textContent =
+        "❤️".repeat(chances) +
+        "🖤".repeat(7 - chances);
+
+    }
+
+    // 숫자 확인
+    function checkGuess() {
+
+      if (gameOver) return;
+
+      const guess = Number(guessInput.value);
+
+      // 입력값 검사
+      if (
+        guessInput.value.trim() === "" ||
+        !Number.isInteger(guess) ||
+        guess < 1 ||
+        guess > 100
+      ) {
+
+        result.textContent = "⚠️";
+        description.textContent =
+          "1부터 100 사이의 정수를 입력하세요.";
+
+        guessInput.focus();
+        return;
+      }
+
+      // 중복 숫자 검사
+      if (guesses.includes(guess)) {
+
+        result.textContent = "이미 입력했어요!";
+        description.textContent =
+          "다른 숫자를 입력해 주세요.";
+
+        guessInput.select();
+        return;
+      }
+
+      // 기회 차감
+      chances--;
+
+      // 숫자 기록
+      guesses.push(guess);
+
+      updateHearts();
+
+      // 정답을 맞힌 경우
+      if (guess === answer) {
+
+        addHistory(guess, "correct");
+
+        result.textContent = "🎉 정답!";
+        result.style.color = "#8ff0b2";
+
+        description.textContent =
+          "정답은 " + answer + "였습니다!";
+
+        endGame();
+
+        return;
+      }
+
+      // 정답보다 작은 경우
+      if (guess < answer) {
+
+        result.textContent = "⬆️ UP!";
+        result.style.color = "#91caff";
+
+        description.textContent =
+          "정답은 " + guess + "보다 큰 숫자입니다.";
+
+        addHistory(guess, "up");
+
+      }
+
+      // 정답보다 큰 경우
+      else {
+
+        result.textContent = "⬇️ DOWN!";
+        result.style.color = "#ffb38e";
+
+        description.textContent =
+          "정답은 " + guess + "보다 작은 숫자입니다.";
+
+        addHistory(guess, "down");
+
+      }
+
+      // 기회를 모두 사용한 경우
+      if (chances === 0) {
+
+        result.textContent = "😭 GAME OVER";
+
+        result.style.color = "#ff9292";
+
+        description.textContent =
+          "정답은 " + answer + "였습니다.";
+
+        endGame();
+
+        return;
+      }
+
+      // 다음 입력 준비
+      guessInput.value = "";
+      guessInput.focus();
+
+    }
+
+    // 입력 기록 추가
+    function addHistory(number, type) {
+
+      // 첫 입력 시 안내 문구 제거
+      if (guesses.length === 1) {
+        historyList.innerHTML = "";
+      }
+
+      const item = document.createElement("div");
+
+      item.className = "history-item " + type;
+
+      let label = "";
+
+      if (type === "up") {
+        label = "⬆️ UP";
+      } else if (type === "down") {
+        label = "⬇️ DOWN";
+      } else {
+        label = "🎯 정답";
+      }
+
+      item.textContent = number + " · " + label;
+
+      historyList.appendChild(item);
+
+    }
+
+    // 게임 종료
+    function endGame() {
+
+      gameOver = true;
+
+      guessInput.disabled = true;
+      guessBtn.disabled = true;
+
+    }
+
+    // 확인 버튼
+    guessBtn.addEventListener("click", checkGuess);
+
+    // 엔터키로도 입력 가능
+    guessInput.addEventListener("keydown", (event) => {
+
+      if (event.key === "Enter") {
+        checkGuess();
+      }
+
+    });
+
+    // 새 게임 버튼
+    restartBtn.addEventListener("click", startGame);
+
+    // 처음 실행
+    startGame();
+
+  </script>
+
+</body>
+</html>
