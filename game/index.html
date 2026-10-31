@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게임 놀이터</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 35px 16px;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      color: #263247;
+      background: linear-gradient(135deg, #e0f2fe, #f3e8ff, #fce7f3);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .main-emoji {
+      font-size: 58px;
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(30px, 6vw, 44px);
+    }
+
+    .intro {
+      color: #64748b;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .game-count {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: #ffffffb8;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .menu-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 27px 20px 24px;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      background: rgba(255, 255, 255, 0.94);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 26px;
+      box-shadow: 0 12px 32px rgba(55, 65, 81, 0.09);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 38px rgba(55, 65, 81, 0.15);
+    }
+
+    .menu-card:focus-visible {
+      outline: 4px solid #647ff2;
+      outline-offset: 4px;
+    }
+
+    .menu-icon {
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      border-radius: 28px;
+      font-size: 52px;
+    }
+
+    .icon-1 { background: #fee2e2; }
+    .icon-2 { background: #dbeafe; }
+    .icon-3 { background: #dcfce7; }
+    .icon-4 { background: #fef3c7; }
+    .icon-5 { background: #ede9fe; }
+    .icon-6 { background: #fce7f3; }
+
+    .menu-card h2 {
+      margin: 0 0 9px;
+      font-size: 22px;
+    }
+
+    .menu-card p {
+      min-height: 48px;
+      margin: 0;
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .go-button {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 11px 22px;
+      border-radius: 999px;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .button-1 { background: #ef6464; }
+    .button-2 { background: #4f7df3; }
+    .button-3 { background: #22a06b; }
+    .button-4 { background: #e6a323; }
+    .button-5 { background: #8b6ce5; }
+    .button-6 { background: #df65a3; }
+
+    footer {
+      margin-top: 35px;
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 30px 15px;
+      }
+
+      header {
+        margin-bottom: 25px;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .menu-card {
+        padding: 24px 18px 22px;
+      }
+
+      .menu-icon {
+        width: 85px;
+        height: 85px;
+        font-size: 44px;
+      }
+
+      .menu-card p {
+        min-height: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .menu-card {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header>
+      <div class="main-emoji">🎮</div>
+      <h1>게임 놀이터</h1>
+
+      <p class="intro">
+        다양한 게임에 도전해 보세요!<br>
+        원하는 게임을 선택해 플레이할 수 있습니다.
+      </p>
+
+      <div class="game-count">
+        총 6개의 게임
+      </div>
+    </header>
+
+    <section class="menu-grid">
+
+      <!-- 게임 1 -->
+      <a class="menu-card" href="./game1.html.html">
+        <div class="menu-icon icon-1">🐹</div>
+        <h2>두더지 잡기</h2>
+        <p>제한 시간 안에 나타나는 두더지를 잡아<br>최고 점수에 도전하세요!</p>
+        <span class="go-button button-1">게임 시작하기 →</span>
+      </a>
+
+      <!-- 게임 2 -->
+      <a class="menu-card" href="./game2.html.html">
+        <div class="menu-icon icon-2">⚡</div>
+        <h2>반응속도 테스트</h2>
+        <p>화면이 바뀌는 순간을 포착하세요.<br>나의 반응속도를 측정해 보세요!</p>
+        <span class="go-button button-2">게임 시작하기 →</span>
+      </a>
+
+      <!-- 게임 3 -->
+      <a class="menu-card" href="./game3.html.html">
+        <div class="menu-icon icon-3">🔢</div>
+        <h2>업다운 숫자 맞히기</h2>
+        <p>1부터 100 사이의 숨겨진 숫자를<br>추리해서 맞혀 보세요!</p>
+        <span class="go-button button-3">게임 시작하기 →</span>
+      </a>
+
+      <!-- 게임 4 -->
+      <a class="menu-card" href="./game4.html.html">
+        <div class="menu-icon icon-4">🃏</div>
+        <h2>같은 그림 찾기</h2>
+        <p>카드를 뒤집어 같은 그림을 찾아보세요.<br>기억력에 도전하세요!</p>
+        <span class="go-button button-4">게임 시작하기 →</span>
+      </a>
+
+      <!-- 게임 5 -->
+      <a class="menu-card" href="./game5.html.html">
+        <div class="menu-icon icon-5">🚀</div>
+        <h2>운석 피하기</h2>
+        <p>우주선을 움직여 운석을 피하세요.<br>얼마나 오래 살아남을 수 있을까요?</p>
+        <span class="go-button button-5">게임 시작하기 →</span>
+      </a>
+
+      <!-- 게임 6 -->
+      <a class="menu-card" href="./game6.html.html">
+        <div class="menu-icon icon-6">🎯</div>
+        <h2>롤 챔피언 이름 맞히기</h2>
+        <p>흐릿한 챔피언 이미지를 보고<br>정답을 맞혀 보세요!</p>
+        <span class="go-button button-6">게임 시작하기 →</span>
+      </a>
+
+    </section>
+
+    <footer>
+      <p>✨ 나만의 게임 공간 ✨</p>
+    </footer>
+
+  </main>
+</body>
+</html>
