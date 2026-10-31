@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>반응속도 테스트 ⚡</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #171729;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 30px;
+      color: #d4c5ff;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #aaa6c9;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .info {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .info-box {
+      flex: 1;
+      padding: 14px 8px;
+      background: #292943;
+      border-radius: 14px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: #aaa6c9;
+      margin-bottom: 7px;
+    }
+
+    .info-value {
+      font-size: 23px;
+      font-weight: bold;
+    }
+
+    #gameArea {
+      width: 100%;
+      height: 350px;
+      border-radius: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      transition: background 0.15s;
+      background: #e74747;
+      box-shadow: 0 10px 35px #0004;
+    }
+
+    #gameArea.waiting {
+      background: #e74747;
+    }
+
+    #gameArea.ready {
+      background: #22b86b;
+    }
+
+    #gameArea.finished {
+      background: #34315a;
+    }
+
+    #gameArea:active {
+      filter: brightness(0.95);
+    }
+
+    .main-text {
+      font-size: clamp(30px, 8vw, 43px);
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .sub-text {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .result {
+      min-height: 35px;
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #d4c5ff;
+    }
+
+    .history {
+      margin-top: 15px;
+      padding: 17px;
+      border-radius: 15px;
+      background: #292943;
+    }
+
+    .history-title {
+      font-size: 14px;
+      color: #aaa6c9;
+      margin-bottom: 12px;
+    }
+
+    #records {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .record {
+      background: #414064;
+      border-radius: 9px;
+      padding: 8px 11px;
+      font-size: 13px;
+    }
+
+    button {
+      margin-top: 18px;
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 13px;
+      background: #9275ff;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: #777493;
+      font-size: 12px;
+    }
+
+    @media (max-height: 700px) {
+      #gameArea {
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <h1>⚡ 반응속도 테스트</h1>
+
+    <p class="subtitle">
+      초록색으로 바뀌는 순간 터치하세요!
+    </p>
+
+    <!-- 기록 정보 -->
+    <section class="info">
+
+      <div class="info-box">
+        <div class="info-label">테스트 횟수</div>
+        <div class="info-value" id="round">0 / 5</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-label">평균 반응속도</div>
+        <div class="info-value" id="average">---</div>
+      </div>
+
+    </section>
+
+    <!-- 게임 화면 -->
+    <section id="gameArea" class="waiting">
+
+      <div class="main-text" id="mainText">
+        시작하기
+      </div>
+
+      <div class="sub-text" id="subText">
+        화면을 터치하세요
+      </div>
+
+    </section>
+
+    <!-- 결과 표시 -->
+    <div class="result" id="result">
+      준비가 되었다면 시작 버튼을 누르세요!
+    </div>
+
+    <!-- 기록 목록 -->
+    <section class="history">
+
+      <div class="history-title">
+        📊 나의 반응속도 기록
+      </div>
+
+      <div id="records">
+        <span class="record">아직 기록이 없어요</span>
+      </div>
+
+    </section>
+
+    <button id="startBtn">
+      테스트 시작 🚀
+    </button>
+
+    <div class="footer">
+      총 5번의 테스트로 평균 반응속도를 측정합니다.
+    </div>
+
+  </main>
+
+  <script>
+
+    // HTML 요소 가져오기
+    const gameArea = document.getElementById("gameArea");
+    const mainText = document.getElementById("mainText");
+    const subText = document.getElementById("subText");
+    const result = document.getElementById("result");
+
+    const roundText = document.getElementById("round");
+    const averageText = document.getElementById("average");
+    const records = document.getElementById("records");
+    const startBtn = document.getElementById("startBtn");
+
+    // 게임 변수
+    let round = 0;
+    let reactionTimes = [];
+
+    let gameState = "idle";
+
+    let startTime = 0;
+    let randomTimer = null;
+
+    const TOTAL_ROUNDS = 5;
+
+    // 화면 초기화
+    function resetScreen() {
+      gameArea.className = "waiting";
+      mainText.textContent = "준비하세요!";
+      subText.textContent = "화면을 터치하세요";
+    }
+
+    // 게임 시작
+    function startGame() {
+
+      clearTimeout(randomTimer);
+
+      round = 0;
+      reactionTimes = [];
+
+      roundText.textContent = "0 / 5";
+      averageText.textContent = "---";
+
+      records.innerHTML =
+        '<span class="record">측정 중...</span>';
+
+      result.textContent = "빨간색일 때 기다리세요!";
+
+      startBtn.textContent = "테스트 진행 중";
+
+      nextRound();
+    }
+
+    // 다음 라운드
+    function nextRound() {
+
+      if (round >= TOTAL_ROUNDS) {
+        finishGame();
+        return;
+      }
+
+      round++;
+
+      roundText.textContent =
+        round + " / " + TOTAL_ROUNDS;
+
+      gameState = "waiting";
+
+      gameArea.className = "waiting";
+
+      mainText.textContent = "🔴 기다리세요!";
+      subText.textContent = "초록색으로 바뀔 때까지 기다리세요";
+
+      result.textContent =
+        round + "번째 테스트 준비 중...";
+
+      // 1.5초~5초 사이 랜덤 대기
+      const delay = Math.random() * 3500 + 1500;
+
+      randomTimer = setTimeout(() => {
+
+        gameState = "ready";
+
+        gameArea.className = "ready";
+
+        mainText.textContent = "🟢 지금 터치!";
+        subText.textContent = "최대한 빠르게!";
+
+        result.textContent = "지금 누르세요!";
+
+        // 반응속도 측정 시작
+        startTime = performance.now();
+
+      }, delay);
+    }
+
+    // 게임 화면 터치
+    gameArea.addEventListener("pointerdown", (event) => {
+
+      event.preventDefault();
+
+      if (gameState === "idle" ||
+          gameState === "finished") {
+        return;
+      }
+
+      // 빨간색일 때 누른 경우
+      if (gameState === "waiting") {
+
+        clearTimeout(randomTimer);
+
+        gameState = "tooEarly";
+
+        gameArea.className = "waiting";
+
+        mainText.textContent = "❌ 너무 빨라요!";
+        subText.textContent = "이번 라운드는 다시 도전합니다";
+
+        result.textContent = "조금만 더 기다려 보세요!";
+
+        setTimeout(() => {
+          if (gameState === "tooEarly") {
+            nextRound();
+          }
+        }, 1000);
+
+        return;
+      }
+
+      // 초록색일 때 누른 경우
+      if (gameState === "ready") {
+
+        const endTime = performance.now();
+
+        const reactionTime =
+          Math.round(endTime - startTime);
+
+        reactionTimes.push(reactionTime);
+
+        gameState = "result";
+
+        gameArea.className = "finished";
+
+        mainText.textContent =
+          reactionTime + " ms";
+
+        subText.textContent = "반응속도 측정 완료!";
+
+        result.textContent =
+          reactionTime + "밀리초!";
+
+        updateRecords();
+
+        setTimeout(() => {
+          if (gameState === "result") {
+            nextRound();
+          }
+        }, 1200);
+      }
+
+    });
+
+    // 기록 업데이트
+    function updateRecords() {
+
+      records.innerHTML = "";
+
+      reactionTimes.forEach((time, index) => {
+
+        const item = document.createElement("div");
+
+        item.className = "record";
+
+        item.textContent =
+          (index + 1) + "회: " + time + "ms";
+
+        records.appendChild(item);
+
+      });
+
+      // 평균 계산
+      const total = reactionTimes.reduce(
+        (sum, time) => sum + time, 0
+      );
+
+      const average = Math.round(
+        total / reactionTimes.length
+      );
+
+      averageText.textContent = average + "ms";
+    }
+
+    // 게임 종료
+    function finishGame() {
+
+      gameState = "finished";
+
+      gameArea.className = "finished";
+
+      const total = reactionTimes.reduce(
+        (sum, time) => sum + time, 0
+      );
+
+      const average = Math.round(
+        total / reactionTimes.length
+      );
+
+      mainText.textContent = "🏆 테스트 완료!";
+
+      subText.textContent =
+        "평균 반응속도 " + average + "ms";
+
+      result.textContent =
+        "5번의 테스트를 모두 완료했습니다!";
+
+      averageText.textContent = average + "ms";
+
+      startBtn.textContent = "다시 테스트하기 🔄";
+    }
+
+    // 시작 버튼
+    startBtn.addEventListener("click", () => {
+
+      if (gameState === "idle" ||
+          gameState === "finished") {
+
+        startGame();
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
