@@ -1,0 +1,510 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>롤 챔피언 이름 맞히기</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 20px 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      color: white;
+      background:
+        radial-gradient(circle at top, #263e66, transparent 55%),
+        linear-gradient(135deg, #080d1c, #111b32);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      padding: 24px 18px;
+      border: 1px solid #42577c;
+      border-radius: 24px;
+      background: rgba(15, 25, 47, 0.97);
+      box-shadow: 0 15px 45px #0008;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      color: #f5d78e;
+      font-size: 25px;
+    }
+
+    .subtitle {
+      margin: 0 0 22px;
+      color: #aab8d3;
+      font-size: 14px;
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: #d6e1f5;
+      font-size: 14px;
+    }
+
+    .progress-bg {
+      height: 8px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #293650;
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #36d1dc, #5b86e5);
+      transition: width 0.3s;
+    }
+
+    .image-box {
+      width: 100%;
+      max-width: 245px;
+      aspect-ratio: 1;
+      margin: 0 auto 20px;
+      overflow: hidden;
+      border: 3px solid #607ca8;
+      border-radius: 20px;
+      background: #202d48;
+    }
+
+    .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(13px) brightness(0.7);
+      transform: scale(1.08);
+      transition: 0.4s;
+    }
+
+    .image-box img.revealed {
+      filter: blur(0) brightness(1);
+      transform: scale(1);
+    }
+
+    .question {
+      margin: 0 0 17px;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .choice {
+      min-height: 55px;
+      padding: 12px 8px;
+      border: 1px solid #53698e;
+      border-radius: 13px;
+      background: #243653;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      overflow-wrap: anywhere;
+      transition: 0.2s;
+    }
+
+    .choice:active {
+      transform: scale(0.97);
+    }
+
+    .choice:hover:not(:disabled) {
+      border-color: #f5d78e;
+      background: #354c70;
+    }
+
+    .choice:disabled {
+      cursor: default;
+      opacity: 0.9;
+    }
+
+    .choice.correct {
+      border-color: #38d996;
+      background: #176347;
+    }
+
+    .choice.wrong {
+      border-color: #ff6b78;
+      background: #71313c;
+    }
+
+    .feedback {
+      min-height: 28px;
+      margin: 18px 0 12px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .next-btn,
+    .restart-btn {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #e8bd63, #f5d78e);
+      color: #17213a;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .next-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .result {
+      display: none;
+    }
+
+    .result h2 {
+      color: #f5d78e;
+      font-size: 25px;
+    }
+
+    .final-score {
+      margin: 25px 0;
+      font-size: 54px;
+      font-weight: bold;
+    }
+
+    .message {
+      color: #c6d3e9;
+      line-height: 1.7;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .loading {
+      padding: 30px 5px;
+      color: #c6d3e9;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 360px) {
+      .container {
+        padding: 20px 13px;
+      }
+
+      .choice {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <section id="loading" class="loading">
+      <h1>⚔️ 챔피언 퀴즈</h1>
+      <p>챔피언 데이터를 불러오는 중...</p>
+    </section>
+
+    <section id="game" class="hidden">
+      <h1>⚔️ 챔피언 퀴즈</h1>
+      <p class="subtitle">
+        흐릿한 사진을 보고 챔피언을 맞혀보세요!
+      </p>
+
+      <div class="status">
+        <span id="questionNumber">문제 1 / 10</span>
+        <span id="score">점수 0점</span>
+      </div>
+
+      <div class="progress-bg">
+        <div class="progress" id="progress"></div>
+      </div>
+
+      <div class="image-box">
+        <img id="championImage" src="" alt="흐릿한 챔피언 이미지">
+      </div>
+
+      <p class="question">
+        이 챔피언의 이름은 무엇일까요?
+      </p>
+
+      <div class="choices" id="choices"></div>
+
+      <p class="feedback" id="feedback"></p>
+
+      <button class="next-btn" id="nextButton" disabled>
+        다음 문제 →
+      </button>
+    </section>
+
+    <section id="result" class="result">
+      <h1>🏆 퀴즈 완료!</h1>
+      <h2>최종 점수</h2>
+      <div class="final-score" id="finalScore">0 / 10</div>
+      <p class="message" id="resultMessage"></p>
+
+      <button class="restart-btn" id="restartButton">
+        다시 도전하기
+      </button>
+    </section>
+
+  </main>
+
+  <script>
+    // 1. 데이터 버전
+    const VERSION = "16.17.1";
+
+    // 2. API 주소
+    const DATA_URL =
+      `https://ddragon.leagueoflegends.com/cdn/${VERSION}/data/ko_KR/champion.json`;
+
+    // 3. 이미지 주소
+    const IMAGE_URL =
+      `https://ddragon.leagueoflegends.com/cdn/${VERSION}/img/champion/`;
+
+    let champions = [];
+    let questions = [];
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
+
+    // HTML 요소 가져오기
+    const loading = document.getElementById("loading");
+    const game = document.getElementById("game");
+    const result = document.getElementById("result");
+
+    const championImage =
+      document.getElementById("championImage");
+
+    const choices =
+      document.getElementById("choices");
+
+    const feedback =
+      document.getElementById("feedback");
+
+    const nextButton =
+      document.getElementById("nextButton");
+
+    // 배열 섞기
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    // 챔피언 데이터 가져오기
+    async function loadChampions() {
+      try {
+        const response = await fetch(DATA_URL);
+
+        if (!response.ok) {
+          throw new Error("데이터를 불러오지 못했습니다.");
+        }
+
+        const json = await response.json();
+
+        // 중요! data는 객체이므로 배열로 변환
+        champions = Object.values(json.data);
+
+        if (champions.length < 10) {
+          throw new Error("챔피언 데이터가 부족합니다.");
+        }
+
+        loading.classList.add("hidden");
+        game.classList.remove("hidden");
+
+        startGame();
+
+      } catch (error) {
+        loading.innerHTML = `
+          <h1>⚠️ 오류 발생</h1>
+          <p>챔피언 데이터를 불러오지 못했어요.</p>
+          <p>인터넷 연결을 확인하고 새로고침해 주세요.</p>
+          <p style="font-size:12px;color:#91a4c5;">
+            ${error.message}
+          </p>
+        `;
+      }
+    }
+
+    // 게임 시작
+    function startGame() {
+      score = 0;
+      currentQuestion = 0;
+
+      // 랜덤 챔피언 10명 선택
+      questions = shuffle(champions).slice(0, 10);
+
+      result.style.display = "none";
+      game.classList.remove("hidden");
+
+      showQuestion();
+    }
+
+    // 문제 보여주기
+    function showQuestion() {
+      answered = false;
+
+      const correctChampion = questions[currentQuestion];
+
+      document.getElementById("questionNumber").textContent =
+        `문제 ${currentQuestion + 1} / 10`;
+
+      document.getElementById("score").textContent =
+        `점수 ${score}점`;
+
+      document.getElementById("progress").style.width =
+        `${(currentQuestion / 10) * 100}%`;
+
+      // 이미지 설정
+      championImage.src =
+        IMAGE_URL + correctChampion.image.full;
+
+      championImage.classList.remove("revealed");
+      championImage.alt = "흐릿한 챔피언 이미지";
+
+      feedback.textContent = "";
+      feedback.style.color = "#ffffff";
+
+      nextButton.disabled = true;
+
+      nextButton.textContent =
+        currentQuestion === 9
+          ? "결과 확인하기 🏆"
+          : "다음 문제 →";
+
+      // 오답 3개 만들기
+      const wrongChoices = shuffle(
+        champions.filter(champion =>
+          champion.id !== correctChampion.id
+        )
+      ).slice(0, 3);
+
+      // 정답과 오답 섞기
+      const allChoices = shuffle([
+        correctChampion,
+        ...wrongChoices
+      ]);
+
+      choices.innerHTML = "";
+
+      allChoices.forEach(champion => {
+        const button = document.createElement("button");
+
+        button.className = "choice";
+        button.textContent = champion.name;
+
+        button.addEventListener("click", () => {
+          checkAnswer(champion, correctChampion, button);
+        });
+
+        choices.appendChild(button);
+      });
+    }
+
+    // 정답 확인
+    function checkAnswer(selected, correct, selectedButton) {
+      if (answered) return;
+
+      answered = true;
+
+      const buttons = choices.querySelectorAll(".choice");
+
+      buttons.forEach(button => {
+        button.disabled = true;
+
+        if (button.textContent === correct.name) {
+          button.classList.add("correct");
+        }
+      });
+
+      // 사진 선명하게 만들기
+      championImage.classList.add("revealed");
+      championImage.alt = correct.name;
+
+      if (selected.id === correct.id) {
+        score++;
+
+        feedback.textContent = "🎉 정답입니다! +1점";
+        feedback.style.color = "#55e6a5";
+
+      } else {
+        selectedButton.classList.add("wrong");
+
+        feedback.textContent =
+          `❌ 오답! 정답은 ${correct.name}입니다.`;
+
+        feedback.style.color = "#ff8992";
+      }
+
+      document.getElementById("score").textContent =
+        `점수 ${score}점`;
+
+      document.getElementById("progress").style.width =
+        `${((currentQuestion + 1) / 10) * 100}%`;
+
+      nextButton.disabled = false;
+    }
+
+    // 다음 문제 버튼
+    nextButton.addEventListener("click", () => {
+      if (!answered) return;
+
+      currentQuestion++;
+
+      if (currentQuestion >= 10) {
+        showResult();
+      } else {
+        showQuestion();
+      }
+    });
+
+    // 결과 화면
+    function showResult() {
+      game.classList.add("hidden");
+      result.style.display = "block";
+
+      document.getElementById("finalScore").textContent =
+        `${score} / 10`;
+
+      let message = "";
+
+      if (score === 10) {
+        message = "완벽해요! 챔피언 지식이 정말 대단하네요!";
+      } else if (score >= 7) {
+        message = "훌륭해요! 챔피언을 꽤 잘 알고 있네요!";
+      } else if (score >= 4) {
+        message = "좋아요! 조금 더 도전해 봐요!";
+      } else {
+        message = "괜찮아요! 다시 도전하면 더 잘할 수 있어요!";
+      }
+
+      document.getElementById("resultMessage").textContent =
+        message;
+    }
+
+    // 다시 도전하기
+    document.getElementById("restartButton")
+      .addEventListener("click", startGame);
+
+    // 실행
+    loadChampions();
+  </script>
+</body>
+</html>
