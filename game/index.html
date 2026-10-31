@@ -2,463 +2,267 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TH ARCADE | 게임 놀이터</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAME PLAYGROUND | TH ARCADE</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 35px 16px;
-      font-family: Arial, "Noto Sans KR", sans-serif;
-      color: #f0f6ff;
-      background:
-        radial-gradient(ellipse at 15% 15%, #123c55 0%, transparent 40%),
-        radial-gradient(ellipse at 85% 85%, #351653 0%, transparent 40%),
-        linear-gradient(135deg, #070b18, #10152b 55%, #090d1c);
-      overflow-x: hidden;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 35px 18px;
+  font-family: Arial, "Malgun Gothic", sans-serif;
+  color: white;
+  background:
+    radial-gradient(circle at 10% 10%, #123b55 0, transparent 35%),
+    radial-gradient(circle at 90% 90%, #35154f 0, transparent 35%),
+    #070b18;
+}
 
-    .container {
-      width: 100%;
-      max-width: 950px;
-      margin: 0 auto;
-    }
+.container {
+  width: 100%;
+  max-width: 950px;
+  margin: auto;
+}
 
-    header {
-      text-align: center;
-      margin-bottom: 38px;
-    }
+header {
+  text-align: center;
+  margin-bottom: 38px;
+}
 
-    .main-emoji {
-      font-size: 62px;
-      filter: drop-shadow(0 0 18px #43eaff);
-      animation: float 3s ease-in-out infinite;
-    }
+.brand {
+  color: #00f5ff;
+  font-size: 13px;
+  letter-spacing: 5px;
+  font-weight: bold;
+}
 
-    .brand {
-      margin-top: 10px;
-      color: #5eeaff;
-      font-size: 12px;
-      font-weight: bold;
-      letter-spacing: 5px;
-      text-shadow: 0 0 12px #36dfff;
-    }
+h1 {
+  font-size: clamp(35px, 7vw, 55px);
+  margin: 15px 0 10px;
+  text-shadow: 0 0 15px #00eaff;
+}
 
-    h1 {
-      margin: 12px 0 10px;
-      font-size: clamp(32px, 6vw, 48px);
-      font-weight: 900;
-      letter-spacing: 2px;
-      background: linear-gradient(90deg, #65eaff, #a78bfa, #ff83d2);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 0 15px #6178ff55);
-    }
+.subtitle {
+  color: #9caecb;
+  font-size: 14px;
+}
 
-    .intro {
-      color: #aab8d3;
-      font-size: 15px;
-      line-height: 1.8;
-    }
+.game-count {
+  display: inline-block;
+  margin-top: 13px;
+  padding: 7px 15px;
+  border: 1px solid #00eaff88;
+  border-radius: 30px;
+  color: #00eaff;
+  font-size: 12px;
+  background: #00eaff10;
+}
 
-    .game-count {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 18px;
-      border-radius: 999px;
-      background: #14243a;
-      border: 1px solid #55dfff77;
-      color: #55dfff;
-      font-size: 13px;
-      font-weight: bold;
-      box-shadow: 0 0 14px #55dfff22;
-    }
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
 
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 22px;
-    }
+.menu-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 205px;
+  padding: 25px;
+  border: 1px solid var(--neon);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #131e33, #0b1020);
+  text-decoration: none;
+  color: white;
+  overflow: hidden;
+  transition: 0.25s;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--neon) 20%, transparent);
+}
 
-    .menu-card {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 28px 20px 25px;
-      text-align: center;
-      text-decoration: none;
-      color: #f0f6ff;
-      background: linear-gradient(145deg, #171f39, #10162b);
-      border: 1px solid #354565;
-      border-radius: 25px;
-      box-shadow: 0 12px 35px #0008;
-      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-      overflow: hidden;
-    }
+.menu-card::before {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--neon);
+  opacity: 0.08;
+  filter: blur(35px);
+  right: -35px;
+  top: -35px;
+}
 
-    .menu-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 15%;
-      width: 70%;
-      height: 2px;
-      opacity: 0.9;
-    }
+.menu-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--neon);
+  box-shadow: 0 0 25px color-mix(in srgb, var(--neon) 45%, transparent);
+}
 
-    .menu-card:hover {
-      transform: translateY(-7px);
-    }
+.menu-icon {
+  font-size: 43px;
+  margin-bottom: 15px;
+  filter: drop-shadow(0 0 9px var(--neon));
+}
 
-    .menu-card:focus-visible {
-      outline: 3px solid #a78bfa;
-      outline-offset: 4px;
-    }
+.menu-card h2 {
+  font-size: 20px;
+  margin: 0 0 9px;
+}
 
-    .menu-icon {
-      width: 100px;
-      height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 18px;
-      border-radius: 28px;
-      font-size: 52px;
-      transition: transform 0.25s;
-    }
+.menu-card p {
+  color: #aab8d0;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
 
-    .menu-card:hover .menu-icon {
-      transform: scale(1.08);
-    }
+.go-button {
+  margin-top: auto;
+  display: inline-block;
+  width: fit-content;
+  padding: 9px 17px;
+  border: 1px solid var(--neon);
+  border-radius: 8px;
+  color: var(--neon);
+  font-size: 12px;
+  font-weight: bold;
+  background: #ffffff08;
+}
 
-    .menu-card h2 {
-      margin: 0 0 10px;
-      font-size: 22px;
-      color: #ffffff;
-    }
+.card-1 { --neon: #ff5277; }
+.card-2 { --neon: #00eaff; }
+.card-3 { --neon: #9dff57; }
+.card-4 { --neon: #ffe45c; }
+.card-5 { --neon: #b47aff; }
+.card-6 { --neon: #ff72d2; }
+.card-7 { --neon: #00f5a0; }
 
-    .menu-card p {
-      min-height: 48px;
-      margin: 0;
-      color: #aab8d3;
-      font-size: 14px;
-      line-height: 1.7;
-    }
+footer {
+  text-align: center;
+  color: #64738e;
+  font-size: 11px;
+  letter-spacing: 3px;
+  margin-top: 40px;
+}
 
-    .go-button {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 23px;
-      border-radius: 999px;
-      font-size: 14px;
-      font-weight: bold;
-      transition: 0.2s;
-    }
+.back {
+  display: block;
+  width: fit-content;
+  margin: 30px auto 0;
+  color: #00eaff;
+  text-decoration: none;
+  font-size: 13px;
+}
 
-    .menu-card:hover .go-button {
-      transform: scale(1.06);
-      filter: brightness(1.12);
-    }
+.back:hover {
+  text-shadow: 0 0 10px #00eaff;
+}
 
-    /* 게임 1 - 빨강 */
-    .card-1::before {
-      background: #ff7070;
-      box-shadow: 0 0 18px #ff7070;
-    }
+@media (max-width: 600px) {
+  body {
+    padding: 28px 14px;
+  }
 
-    .card-1:hover {
-      border-color: #ff7070;
-      box-shadow: 0 0 12px #ff707055, 0 0 30px #ff707033;
-    }
+  .game-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
 
-    .icon-1 {
-      background: #401f35;
-      border: 1px solid #ff707088;
-      box-shadow: 0 0 22px #ff707033;
-    }
+  .menu-card {
+    min-height: 175px;
+    padding: 21px;
+  }
 
-    .button-1 {
-      color: #260b12;
-      background: #ff7070;
-      box-shadow: 0 0 15px #ff707077;
-    }
+  .menu-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
 
-    /* 게임 2 - 파랑 */
-    .card-2::before {
-      background: #55dfff;
-      box-shadow: 0 0 18px #55dfff;
-    }
-
-    .card-2:hover {
-      border-color: #55dfff;
-      box-shadow: 0 0 12px #55dfff55, 0 0 30px #55dfff33;
-    }
-
-    .icon-2 {
-      background: #122f4a;
-      border: 1px solid #55dfff88;
-      box-shadow: 0 0 22px #55dfff33;
-    }
-
-    .button-2 {
-      color: #061622;
-      background: #55dfff;
-      box-shadow: 0 0 15px #55dfff77;
-    }
-
-    /* 게임 3 - 초록 */
-    .card-3::before {
-      background: #50ffae;
-      box-shadow: 0 0 18px #50ffae;
-    }
-
-    .card-3:hover {
-      border-color: #50ffae;
-      box-shadow: 0 0 12px #50ffae55, 0 0 30px #50ffae33;
-    }
-
-    .icon-3 {
-      background: #123b32;
-      border: 1px solid #50ffae88;
-      box-shadow: 0 0 22px #50ffae33;
-    }
-
-    .button-3 {
-      color: #061b13;
-      background: #50ffae;
-      box-shadow: 0 0 15px #50ffae77;
-    }
-
-    /* 게임 4 - 노랑 */
-    .card-4::before {
-      background: #ffe477;
-      box-shadow: 0 0 18px #ffe477;
-    }
-
-    .card-4:hover {
-      border-color: #ffe477;
-      box-shadow: 0 0 12px #ffe47755, 0 0 30px #ffe47733;
-    }
-
-    .icon-4 {
-      background: #40351c;
-      border: 1px solid #ffe47788;
-      box-shadow: 0 0 22px #ffe47733;
-    }
-
-    .button-4 {
-      color: #241b05;
-      background: #ffe477;
-      box-shadow: 0 0 15px #ffe47777;
-    }
-
-    /* 게임 5 - 보라 */
-    .card-5::before {
-      background: #b58aff;
-      box-shadow: 0 0 18px #b58aff;
-    }
-
-    .card-5:hover {
-      border-color: #b58aff;
-      box-shadow: 0 0 12px #b58aff55, 0 0 30px #b58aff33;
-    }
-
-    .icon-5 {
-      background: #30234b;
-      border: 1px solid #b58aff88;
-      box-shadow: 0 0 22px #b58aff33;
-    }
-
-    .button-5 {
-      color: #190d2c;
-      background: #b58aff;
-      box-shadow: 0 0 15px #b58aff77;
-    }
-
-    /* 게임 6 - 분홍 */
-    .card-6::before {
-      background: #ff83d2;
-      box-shadow: 0 0 18px #ff83d2;
-    }
-
-    .card-6:hover {
-      border-color: #ff83d2;
-      box-shadow: 0 0 12px #ff83d255, 0 0 30px #ff83d233;
-    }
-
-    .icon-6 {
-      background: #42213d;
-      border: 1px solid #ff83d288;
-      box-shadow: 0 0 22px #ff83d233;
-    }
-
-    .button-6 {
-      color: #2b0b20;
-      background: #ff83d2;
-      box-shadow: 0 0 15px #ff83d277;
-    }
-
-    footer {
-      margin-top: 38px;
-      text-align: center;
-      color: #687b9e;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-9px);
-      }
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 30px 15px;
-      }
-
-      header {
-        margin-bottom: 28px;
-      }
-
-      .menu-grid {
-        grid-template-columns: 1fr;
-        gap: 17px;
-      }
-
-      .menu-card {
-        padding: 25px 18px 22px;
-      }
-
-      .menu-icon {
-        width: 85px;
-        height: 85px;
-        font-size: 44px;
-      }
-
-      .menu-card p {
-        min-height: 0;
-      }
-
-      footer {
-        margin-top: 30px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-      }
-    }
-  </style>
+  .menu-card h2 {
+    font-size: 18px;
+  }
+}
+</style>
 </head>
 
 <body>
-  <main class="container">
 
-    <header>
-      <div class="main-emoji">🎮</div>
-      <div class="brand">TH ARCADE</div>
+<div class="container">
 
-      <h1>GAME PLAYGROUND</h1>
+  <header>
+    <div class="brand">TH ARCADE</div>
+    <h1>GAME PLAYGROUND</h1>
+    <p class="subtitle">나만의 게임 놀이터에 오신 것을 환영합니다!</p>
+    <div class="game-count">TOTAL 07 GAMES</div>
+  </header>
 
-      <p class="intro">
-        다양한 게임에 도전해 보세요!<br>
-        원하는 게임을 선택해 플레이할 수 있습니다.
-      </p>
+  <main class="game-grid">
 
-      <div class="game-count">
-        ✦ TOTAL 6 GAMES ✦
-      </div>
-    </header>
+    <a href="./game1.html" class="menu-card card-1">
+      <div class="menu-icon">🔨</div>
+      <h2>두더지 잡기</h2>
+      <p>빠르게 나타나는 두더지를 잡아 최고 점수에 도전하세요!</p>
+      <span class="go-button">PLAY GAME →</span>
+    </a>
 
-    <section class="menu-grid">
+    <a href="./game2.html" class="menu-card card-2">
+      <div class="menu-icon">⚡</div>
+      <h2>반응속도 테스트</h2>
+      <p>순간적인 반응속도를 측정하고 기록을 단축해 보세요!</p>
+      <span class="go-button">PLAY GAME →</span>
+    </a>
 
-      <!-- 게임 1 -->
-      <a class="menu-card card-1" href="./game1.html">
-        <div class="menu-icon icon-1">🐹</div>
-        <h2>두더지 잡기</h2>
-        <p>
-          제한 시간 안에 나타나는 두더지를 잡아<br>
-          최고 점수에 도전하세요!
-        </p>
-        <span class="go-button button-1">게임 시작하기 →</span>
-      </a>
+    <a href="./game3.html" class="menu-card card-3">
+      <div class="menu-icon">🔢</div>
+      <h2>업다운 숫자 맞히기</h2>
+      <p>힌트를 이용해 숨겨진 숫자를 찾아내세요!</p>
+      <span class="go-button">PLAY GAME →</span>
+    </a>
 
-      <!-- 게임 2 -->
-      <a class="menu-card card-2" href="./game2.html">
-        <div class="menu-icon icon-2">⚡</div>
-        <h2>반응속도 테스트</h2>
-        <p>
-          화면이 바뀌는 순간을 포착하세요.<br>
-          나의 반응속도를 측정해 보세요!
-        </p>
-        <span class="go-button button-2">게임 시작하기 →</span>
-      </a>
+    <a href="./game4.html" class="menu-card card-4">
+      <div class="menu-icon">🧠</div>
+      <h2>같은 그림 찾기</h2>
+      <p>카드의 그림을 기억하고 같은 짝을 찾아보세요!</p>
+      <span class="go-button">PLAY GAME →</span>
+    </a>
 
-      <!-- 게임 3 -->
-      <a class="menu-card card-3" href="./game3.html">
-        <div class="menu-icon icon-3">🔢</div>
-        <h2>업다운 숫자 맞히기</h2>
-        <p>
-          1부터 100 사이의 숨겨진 숫자를<br>
-          추리해서 맞혀 보세요!
-        </p>
-        <span class="go-button button-3">게임 시작하기 →</span>
-      </a>
+    <a href="./game5.html" class="menu-card card-5">
+      <div class="menu-icon">☄️</div>
+      <h2>운석 피하기</h2>
+      <p>날아오는 운석을 피하며 최대한 오래 버텨보세요!</p>
+      <span class="go-button">PLAY GAME →</span>
+    </a>
 
-      <!-- 게임 4 -->
-      <a class="menu-card card-4" href="./game4.html">
-        <div class="menu-icon icon-4">🃏</div>
-        <h2>같은 그림 찾기</h2>
-        <p>
-          카드를 뒤집어 같은 그림을 찾아보세요.<br>
-          기억력에 도전하세요!
-        </p>
-        <span class="go-button button-4">게임 시작하기 →</span>
-      </a>
+    <a href="./game6.html" class="menu-card card-6">
+      <div class="menu-icon">🎮</div>
+      <h2>롤 챔피언 이름 맞히기</h2>
+      <p>챔피언의 이름을 맞히고 지식을 테스트해 보세요!</p>
+      <span class="go-button">PLAY GAME →</span>
+    </a>
 
-      <!-- 게임 5 -->
-      <a class="menu-card card-5" href="./game5.html">
-        <div class="menu-icon icon-5">🚀</div>
-        <h2>운석 피하기</h2>
-        <p>
-          우주선을 움직여 운석을 피하세요.<br>
-          얼마나 오래 살아남을 수 있을까요?
-        </p>
-        <span class="go-button button-5">게임 시작하기 →</span>
-      </a>
-
-      <!-- 게임 6 -->
-      <a class="menu-card card-6" href="./game6.html">
-        <div class="menu-icon icon-6">🎯</div>
-        <h2>롤 챔피언 이름 맞히기</h2>
-        <p>
-          흐릿한 챔피언 이미지를 보고<br>
-          정답을 맞혀 보세요!
-        </p>
-        <span class="go-button button-6">게임 시작하기 →</span>
-      </a>
-
-    </section>
-
-    <footer>
-      <p>✦ TH ARCADE · PLAY YOUR GAME ✦</p>
-    </footer>
+    <a href="./game7.html" class="menu-card card-7">
+      <div class="menu-icon">🐍</div>
+      <h2>스네이크 게임</h2>
+      <p>먹이를 먹으며 뱀을 성장시키고 최고 점수에 도전하세요!</p>
+      <span class="go-button">PLAY GAME →</span>
+    </a>
 
   </main>
+
+  <a href="../index.html" class="back">← 메인 화면으로 돌아가기</a>
+
+  <footer>
+    TH ARCADE · PLAY YOUR GAME
+  </footer>
+
+</div>
+
 </body>
 </html>
