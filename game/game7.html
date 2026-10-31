@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스네이크 게임 | TH ARCADE</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 25px 15px;
+  background:
+    radial-gradient(circle at 15% 15%, #123b55 0, transparent 35%),
+    radial-gradient(circle at 85% 85%, #35154f 0, transparent 35%),
+    #070b18;
+  color: white;
+  font-family: Arial, "Malgun Gothic", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.brand {
+  color: #00f5ff;
+  font-size: 13px;
+  letter-spacing: 4px;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: clamp(30px, 8vw, 42px);
+  margin: 12px 0 8px;
+  color: #fff;
+  text-shadow: 0 0 15px #00eaff;
+}
+
+.subtitle {
+  color: #9caecb;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+.score-board {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.score-box {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #00eaff66;
+  border-radius: 12px;
+  background: #101a2d;
+}
+
+.score-box span {
+  display: block;
+  color: #9caecb;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.score-box strong {
+  color: #00f5ff;
+  font-size: 23px;
+}
+
+.game-wrap {
+  position: relative;
+  width: 100%;
+  border: 2px solid #00eaff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 20px #00eaff55;
+  background: #080f20;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #050a17d9;
+  padding: 20px;
+}
+
+.overlay h2 {
+  font-size: 27px;
+  color: #00f5ff;
+  text-shadow: 0 0 12px #00eaff;
+  margin: 0 0 10px;
+}
+
+.overlay p {
+  color: #c2cce0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.main-btn {
+  background: #00eaff;
+  color: #07111e;
+  padding: 13px 28px;
+  box-shadow: 0 0 15px #00eaff88;
+  margin-top: 10px;
+}
+
+.main-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #00eaff;
+}
+
+.controls {
+  margin: 20px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 58px);
+  grid-template-rows: repeat(2, 52px);
+  justify-content: center;
+  gap: 7px;
+}
+
+.control-btn {
+  background: #17243a;
+  color: #00f5ff;
+  border: 1px solid #00eaff88;
+  font-size: 23px;
+  box-shadow: 0 0 10px #00eaff22;
+  touch-action: manipulation;
+}
+
+.control-btn:active {
+  background: #00eaff;
+  color: #07111e;
+}
+
+.up { grid-column: 2; grid-row: 1; }
+.left { grid-column: 1; grid-row: 2; }
+.down { grid-column: 2; grid-row: 2; }
+.right { grid-column: 3; grid-row: 2; }
+
+.help {
+  color: #7f91ae;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 18px;
+}
+
+.back {
+  display: inline-block;
+  margin-top: 22px;
+  color: #00eaff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.back:hover {
+  text-shadow: 0 0 10px #00eaff;
+}
+
+@media (min-width: 600px) {
+  .controls {
+    display: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="brand">TH ARCADE</div>
+  <h1>🐍 SNAKE GAME</h1>
+  <p class="subtitle">먹이를 먹고 최고 기록에 도전하세요!</p>
+
+  <div class="score-board">
+    <div class="score-box">
+      <span>현재 점수</span>
+      <strong id="score">0</strong>
+    </div>
+    <div class="score-box">
+      <span>최고 점수</span>
+      <strong id="best">0</strong>
+    </div>
+  </div>
+
+  <div class="game-wrap">
+    <canvas id="game" width="400" height="400"></canvas>
+
+    <div class="overlay" id="overlay">
+      <h2 id="overlayTitle">SNAKE GAME</h2>
+      <p id="overlayText">먹이를 먹고 뱀을 성장시키세요!<br>벽이나 자기 몸에 부딪히면 게임이 끝납니다.</p>
+      <button class="main-btn" id="startBtn">게임 시작</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn up" data-dir="up">▲</button>
+    <button class="control-btn left" data-dir="left">◀</button>
+    <button class="control-btn down" data-dir="down">▼</button>
+    <button class="control-btn right" data-dir="right">▶</button>
+  </div>
+
+  <p class="help">
+    PC: 방향키 또는 WASD로 이동<br>
+    모바일: 아래 방향 버튼으로 이동
+  </p>
+
+  <a class="back" href="./index.html">← 게임 목록으로 돌아가기</a>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const size = 20;
+const count = canvas.width / size;
+
+const scoreEl = document.getElementById("score");
+const bestEl = document.getElementById("best");
+const overlay = document.getElementById("overlay");
+const titleEl = document.getElementById("overlayTitle");
+const textEl = document.getElementById("overlayText");
+const startBtn = document.getElementById("startBtn");
+
+let snake;
+let food;
+let direction;
+let nextDirection;
+let score = 0;
+let timer = null;
+let running = false;
+
+let best = Number(localStorage.getItem("snakeBest") || 0);
+bestEl.textContent = best;
+
+function randomFood() {
+  let position;
+
+  do {
+    position = {
+      x: Math.floor(Math.random() * count),
+      y: Math.floor(Math.random() * count)
+    };
+  } while (snake.some(part =>
+    part.x === position.x && part.y === position.y
+  ));
+
+  return position;
+}
+
+function drawCell(x, y, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(
+    x * size + 2,
+    y * size + 2,
+    size - 4,
+    size - 4
+  );
+}
+
+function draw() {
+  ctx.fillStyle = "#080f20";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // 격자
+  ctx.strokeStyle = "#17243a";
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= count; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * size, 0);
+    ctx.lineTo(i * size, canvas.height);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(0, i * size);
+    ctx.lineTo(canvas.width, i * size);
+    ctx.stroke();
+  }
+
+  // 먹이
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = "#ff3d81";
+  drawCell(food.x, food.y, "#ff3d81");
+
+  // 뱀
+  snake.forEach((part, index) => {
+    ctx.shadowColor = "#00f5a0";
+    ctx.shadowBlur = 12;
+    drawCell(
+      part.x,
+      part.y,
+      index === 0 ? "#b8ff4d" : "#00d99a"
+    );
+  });
+
+  ctx.shadowBlur = 0;
+}
+
+function startGame() {
+  clearInterval(timer);
+
+  snake = [
+    { x: 10, y: 10 },
+    { x: 9, y: 10 },
+    { x: 8, y: 10 }
+  ];
+
+  direction = "right";
+  nextDirection = "right";
+  score = 0;
+  running = true;
+
+  scoreEl.textContent = score;
+  food = randomFood();
+
+  overlay.style.display = "none";
+  draw();
+
+  timer = setInterval(update, 130);
+}
+
+function changeDirection(newDir) {
+  if (!running) return;
+
+  const opposite = {
+    up: "down",
+    down: "up",
+    left: "right",
+    right: "left"
+  };
+
+  if (opposite[newDir] !== direction) {
+    nextDirection = newDir;
+  }
+}
+
+function update() {
+  direction = nextDirection;
+
+  const head = { ...snake[0] };
+
+  if (direction === "up") head.y--;
+  if (direction === "down") head.y++;
+  if (direction === "left") head.x--;
+  if (direction === "right") head.x++;
+
+  // 벽 충돌
+  if (
+    head.x < 0 || head.x >= count ||
+    head.y < 0 || head.y >= count
+  ) {
+    gameOver();
+    return;
+  }
+
+  const eating =
+    head.x === food.x && head.y === food.y;
+
+  // 먹이를 먹지 않을 때는 꼬리가 이동하므로
+  // 마지막 칸은 충돌 검사에서 제외
+  const bodyToCheck = eating ? snake : snake.slice(0, -1);
+
+  if (bodyToCheck.some(part =>
+    part.x === head.x && part.y === head.y
+  )) {
+    gameOver();
+    return;
+  }
+
+  snake.unshift(head);
+
+  if (eating) {
+    score += 10;
+    scoreEl.textContent = score;
+
+    if (score > best) {
+      best = score;
+      bestEl.textContent = best;
+      localStorage.setItem("snakeBest", best);
+    }
+
+    food = randomFood();
+  } else {
+    snake.pop();
+  }
+
+  draw();
+}
+
+function gameOver() {
+  clearInterval(timer);
+  running = false;
+
+  titleEl.textContent = "GAME OVER";
+  textEl.innerHTML =
+    "최종 점수: " + score + "점<br>다시 도전해 보세요!";
+
+  startBtn.textContent = "다시 하기";
+  overlay.style.display = "flex";
+}
+
+startBtn.addEventListener("click", startGame);
+
+document.addEventListener("keydown", (e) => {
+  const keys = {
+    ArrowUp: "up",
+    ArrowDown: "down",
+    ArrowLeft: "left",
+    ArrowRight: "right",
+    w: "up",
+    W: "up",
+    s: "down",
+    S: "down",
+    a: "left",
+    A: "left",
+    d: "right",
+    D: "right"
+  };
+
+  if (keys[e.key]) {
+    e.preventDefault();
+    changeDirection(keys[e.key]);
+  }
+});
+
+document.querySelectorAll(".control-btn").forEach(button => {
+  button.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    changeDirection(button.dataset.dir);
+  });
+});
+
+// 처음 화면 그리기
+snake = [
+  { x: 10, y: 10 },
+  { x: 9, y: 10 },
+  { x: 8, y: 10 }
+];
+food = { x: 15, y: 10 };
+draw();
+</script>
+
+</body>
+</html>
